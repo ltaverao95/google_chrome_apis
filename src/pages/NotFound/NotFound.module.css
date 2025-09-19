@@ -1,0 +1,4 @@
+.wrapper { text-align: center; display: flex; flex-direction: column; gap: 1rem; }
+.wrapper h1 { font-size: clamp(4rem, 12vw, 7rem); margin: 0; line-height: 0.85; background: linear-gradient(135deg,var(--color-accent),var(--color-emphasis)); -webkit-background-clip: text; color: transparent; }
+.back { display: inline-block; margin: 0 auto; background: var(--color-accent); color: #fff; padding: .65rem 1.15rem; border-radius: 999px; text-decoration: none; font-weight: 600; letter-spacing: .5px; transition: background .3s; }
+.back:hover { background: var(--color-emphasis); }

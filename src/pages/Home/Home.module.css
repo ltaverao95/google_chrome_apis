@@ -1,0 +1,50 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.wrapper h1 {
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  line-height: 1.05;
+  background: linear-gradient(90deg,var(--color-emphasis), var(--color-accent));
+  -webkit-background-clip: text;
+  color: transparent;
+  font-family: var(--font-headings);
+  letter-spacing: 1px;
+}
+
+.wrapper p { font-size: 1.05rem; max-width: 60ch; }
+
+.grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 1rem 1.1rem 1.25rem;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 16px -4px rgba(0,0,0,0.35);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255,0,110,0.35), transparent 60%),
+              radial-gradient(circle at 70% 70%, rgba(131,56,236,0.35), transparent 60%);
+  opacity: 0.85;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.card:hover { transform: translateY(-4px); }
+.card h2 { margin: 0 0 .5rem; font-size: 1.25rem; letter-spacing: .5px; }
+.card p { font-size: .9rem; line-height: 1.35; }

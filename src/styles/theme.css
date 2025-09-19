@@ -1,0 +1,22 @@
+:root {
+  --font-base: 'Poppins', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-headings: 'Poppins', system-ui, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --color-bg: #0f0a1f;
+  --color-accent: #FF006E;
+  --color-emphasis: #F9C80E;
+  --color-secondary: #8338EC;
+  --color-info: #3A86FF;
+  --color-text-primary: #f5f6f9;
+  --color-text-dim: #c3c6d1;
+
+  --gradient-bg: linear-gradient(135deg,#0f0a1f,#1d1238 55%, #26185c);
+}
+
+::selection { background: var(--color-accent); color: #fff; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #120b24; }
+::-webkit-scrollbar-thumb { background: linear-gradient(var(--color-accent), var(--color-secondary)); border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(var(--color-emphasis), var(--color-accent)); }

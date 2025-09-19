@@ -1,0 +1,13 @@
+/* Estilos globales y reset ligero */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body { margin: 0; font-family: var(--font-base); background: var(--gradient-bg); color: var(--color-text-primary); }
+body, #root { min-height: 100dvh; }
+img, svg { display: block; max-width: 100%; }
+button { font-family: inherit; }
+a { color: var(--color-accent); }
+code { font-family: var(--font-mono); background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
