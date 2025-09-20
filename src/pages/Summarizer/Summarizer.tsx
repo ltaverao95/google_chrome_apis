@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import styles from "./Summarizer.module.css";
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 
 //declare Summarizer as global
 declare global {
   const Summarizer: any;
 }
+
+const cachedSummarizer: Record<string, typeof Summarizer> = {};
 
 export const SummarizerComponent = () => {
   const [text, setText] = useState("");
@@ -15,12 +17,12 @@ export const SummarizerComponent = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
-  const [summarizer, setSummarizer] = useState<any>(null);
+  const [summarizerOptions, setSummarizerOptions] = useState<any>(null);
 
   // nuevos estados mock para selects
-  const [summarizerType, setSummarizerType] = useState('tldr');
-  const [summarizerFormat, setSummarizerFormat] = useState('plain-text');
-  const [summarizerLength, setSummarizerLength] = useState('short');
+  const [summarizerType, setSummarizerType] = useState("tldr");
+  const [summarizerFormat, setSummarizerFormat] = useState("plain-text");
+  const [summarizerLength, setSummarizerLength] = useState("short");
 
   useEffect(() => {
     const init = async () => {
@@ -31,9 +33,9 @@ export const SummarizerComponent = () => {
         return;
       }
 
-      // Check for user activation before creating the summarizer
-      if (!navigator.userActivation.isActive) {
-        console.log("API inactive");
+      if (availability === "downloading") {
+        // The Summarizer API isn't usable.
+        console.log("Downloading API");
         return;
       }
 
@@ -41,10 +43,16 @@ export const SummarizerComponent = () => {
         sharedContext: sharedContext,
         type: summarizerType,
         format: summarizerFormat,
-        length: summarizerLength
+        length: summarizerLength,
       };
 
-      const modelKey = JSON.stringify(options)
+      const modelKey = JSON.stringify(options);
+      
+      if(cachedSummarizer[modelKey])
+      {
+        console.log("Content cached.");
+        return;
+      }
 
       const newSummarizer = await Summarizer.create({
         ...options,
@@ -55,9 +63,13 @@ export const SummarizerComponent = () => {
               `Download progress: ${progressEvent.loaded * 100}% of ${modelKey}`
             );
           });
-        }
+        },
       });
-      setSummarizer(newSummarizer);
+
+      cachedSummarizer[modelKey] = newSummarizer;
+      setSummarizerOptions(modelKey);
+      console.log("Content created and added to cache");
+      
     };
     init();
   }, [sharedContext, summarizerType, summarizerFormat, summarizerLength]);
@@ -68,7 +80,7 @@ export const SummarizerComponent = () => {
     setError(null);
     setResult(null);
     try {
-      const summary = await summarizer.summarize(text, {
+      const summary = await cachedSummarizer[summarizerOptions].summarize(text, {
         context: sharedContext,
       });
 
@@ -90,7 +102,9 @@ export const SummarizerComponent = () => {
   return (
     <section className={styles.wrapper}>
       <NavLink to="/" className={styles.backLink}>
-        <span className={styles.backIcon} aria-hidden="true">←</span>
+        <span className={styles.backIcon} aria-hidden="true">
+          ←
+        </span>
         <span className={styles.backText}>Inicio</span>
       </NavLink>
       <div className={styles.left}>
@@ -128,11 +142,18 @@ export const SummarizerComponent = () => {
         </form>
       </div>
       <div className={styles.right}>
-        <form className={styles.rightForm} aria-label="Opciones de resumen (mock)">
+        <form
+          className={styles.rightForm}
+          aria-label="Opciones de resumen (mock)"
+        >
           <div className={styles.selectGroup}>
             <label className={styles.selectLabel}>
               Type
-              <select value={summarizerType} onChange={e => setSummarizerType(e.target.value)} className={styles.select}>
+              <select
+                value={summarizerType}
+                onChange={(e) => setSummarizerType(e.target.value)}
+                className={styles.select}
+              >
                 <option value="key-points">Key Points</option>
                 <option value="tldr">TLDR</option>
                 <option value="teaser">Teaser</option>
@@ -141,14 +162,22 @@ export const SummarizerComponent = () => {
             </label>
             <label className={styles.selectLabel}>
               Formats
-              <select value={summarizerFormat} onChange={e => setSummarizerFormat(e.target.value)} className={styles.select}>
+              <select
+                value={summarizerFormat}
+                onChange={(e) => setSummarizerFormat(e.target.value)}
+                className={styles.select}
+              >
                 <option value="markdown">Markdown</option>
                 <option value="plain-text">Plain Text</option>
               </select>
             </label>
             <label className={styles.selectLabel}>
               Option Length
-              <select value={summarizerLength} onChange={e => setSummarizerLength(e.target.value)} className={styles.select}>
+              <select
+                value={summarizerLength}
+                onChange={(e) => setSummarizerLength(e.target.value)}
+                className={styles.select}
+              >
                 <option value="short">Short</option>
                 <option value="medium">Medium</option>
                 <option value="long">Long</option>
