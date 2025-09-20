@@ -10,9 +10,9 @@ declare global {
 const cachedSummarizer: Record<string, typeof Summarizer> = {};
 
 export const SummarizerComponent = () => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(`These documents collectively outline Chrome's built-in AI capabilities, specifically focusing on various client-side Web APIs powered by Gemini Nano. They detail the Prompt API for general language model interactions, including multimodal input (images, audio), and the Writing Assistance APIs (Writer, Rewriter, Summarizer, Proofreader) for content creation and refinement. Additionally, the Translation APIs (Translator, Language Detector) enable multilingual experiences directly within the browser. The sources emphasise best practices for developers, covering aspects such as session management, efficient rendering of streamed responses, caching AI models, and debugging techniques, while also addressing security concerns and promoting a hybrid AI approach with server-side fallbacks like Firebase AI Logic.`);
   const [sharedContext, setSharedContext] = useState(
-    "You are a helpful assistant to summarize content from an input."
+    "Explain clearly and concisely to a general audience."
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
