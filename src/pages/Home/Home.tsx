@@ -9,7 +9,7 @@ export const Home = () => {
       </p>
       <div className={styles.grid}> 
         <div className={styles.card}>
-          <h2>Rutas</h2>
+          <h2>Summarizer API</h2>
           <p>React Router 6 listo para ampliar con más secciones.</p>
         </div>
         <div className={styles.card}>
