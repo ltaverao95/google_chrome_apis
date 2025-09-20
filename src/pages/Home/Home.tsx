@@ -1,4 +1,5 @@
 import styles from './Home.module.css';
+import { NavLink } from 'react-router-dom';
 
 export const Home = () => {
   return (
@@ -11,6 +12,9 @@ export const Home = () => {
         <div className={styles.card}>
           <h2>Summarizer API</h2>
           <p>React Router 6 listo para ampliar con más secciones.</p>
+          <NavLink to="/summarizer" className={styles.goLink}>
+            Ir <span aria-hidden="true">→</span>
+          </NavLink>
         </div>
         <div className={styles.card}>
           <h2>Estilos</h2>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./Summarizer.module.css";
+import { NavLink } from 'react-router-dom';
 
 //declare Summarizer as global
 declare global {
@@ -15,6 +16,11 @@ export const SummarizerComponent = () => {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const [summarizer, setSummarizer] = useState<any>(null);
+
+  // nuevos estados mock para selects
+  const [summarizerType, setSummarizerType] = useState('tldr');
+  const [summarizerFormat, setSummarizerFormat] = useState('plain-text');
+  const [summarizerLength, setSummarizerLength] = useState('short');
 
   useEffect(() => {
     const init = async () => {
@@ -33,17 +39,17 @@ export const SummarizerComponent = () => {
 
       const options = {
         sharedContext: sharedContext,
-        type: "key-points",
-        format: "markdown",
-        length: "medium"
+        type: summarizerType,
+        format: summarizerFormat,
+        length: summarizerLength
       };
 
       const modelKey = JSON.stringify(options)
 
       const newSummarizer = await Summarizer.create({
         ...options,
-        monitor(m) {
-          m.addEventListener("downloadprogress", (e) => {
+        monitor(m: any) {
+          m.addEventListener("downloadprogress", (e: Event) => {
             const progressEvent = e as ProgressEvent;
             console.log(
               `Download progress: ${progressEvent.loaded * 100}% of ${modelKey}`
@@ -54,7 +60,7 @@ export const SummarizerComponent = () => {
       setSummarizer(newSummarizer);
     };
     init();
-  }, [sharedContext]);
+  }, [sharedContext, summarizerType, summarizerFormat, summarizerLength]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,6 +89,10 @@ export const SummarizerComponent = () => {
 
   return (
     <section className={styles.wrapper}>
+      <NavLink to="/" className={styles.backLink}>
+        <span className={styles.backIcon} aria-hidden="true">←</span>
+        <span className={styles.backText}>Inicio</span>
+      </NavLink>
       <div className={styles.left}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <h1 className={styles.title}>Text to summarize</h1>
@@ -118,12 +128,43 @@ export const SummarizerComponent = () => {
         </form>
       </div>
       <div className={styles.right}>
-        <h2 className={styles.subtitle}>Resultado</h2>
-        {!result && !loading && (
-          <p className={styles.placeholder}>El resumen aparecerá aquí.</p>
-        )}
-        {loading && <p className={styles.loading}>Generando resumen...</p>}
-        {result && <article className={styles.result}>{result}</article>}
+        <form className={styles.rightForm} aria-label="Opciones de resumen (mock)">
+          <div className={styles.selectGroup}>
+            <label className={styles.selectLabel}>
+              Type
+              <select value={summarizerType} onChange={e => setSummarizerType(e.target.value)} className={styles.select}>
+                <option value="key-points">Key Points</option>
+                <option value="tldr">TLDR</option>
+                <option value="teaser">Teaser</option>
+                <option value="headline">Headline</option>
+              </select>
+            </label>
+            <label className={styles.selectLabel}>
+              Formats
+              <select value={summarizerFormat} onChange={e => setSummarizerFormat(e.target.value)} className={styles.select}>
+                <option value="markdown">Markdown</option>
+                <option value="plain-text">Plain Text</option>
+              </select>
+            </label>
+            <label className={styles.selectLabel}>
+              Option Length
+              <select value={summarizerLength} onChange={e => setSummarizerLength(e.target.value)} className={styles.select}>
+                <option value="short">Short</option>
+                <option value="medium">Medium</option>
+                <option value="long">Long</option>
+              </select>
+            </label>
+          </div>
+        </form>
+        <hr className={styles.divider} />
+        <div className={styles.resultZone}>
+          <h2 className={styles.subtitle}>Resultado</h2>
+          {!result && !loading && (
+            <p className={styles.placeholder}>El resumen aparecerá aquí.</p>
+          )}
+          {loading && <p className={styles.loading}>Generando resumen...</p>}
+          {result && <article className={styles.result}>{result}</article>}
+        </div>
       </div>
     </section>
   );
