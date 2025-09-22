@@ -135,7 +135,7 @@ export const SummarizerComponent = () => {
             />
           </label>
           <button className={styles.button} disabled={disabled} type="submit">
-            {loading ? "Summarizing…" : "Summarize"}
+            Summarize
           </button>
           {error && (
             <p className={styles.error} role="alert">
