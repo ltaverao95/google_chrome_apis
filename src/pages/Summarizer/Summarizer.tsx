@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import styles from "./Summarizer.module.css";
 import { NavLink } from "react-router-dom";
 
-//declare Summarizer as global
 declare global {
   const Summarizer: any;
 }
@@ -10,7 +9,9 @@ declare global {
 const cachedSummarizer: Record<string, typeof Summarizer> = {};
 
 export const SummarizerComponent = () => {
-  const [text, setText] = useState(`These documents collectively outline Chrome's built-in AI capabilities, specifically focusing on various client-side Web APIs powered by Gemini Nano. They detail the Prompt API for general language model interactions, including multimodal input (images, audio), and the Writing Assistance APIs (Writer, Rewriter, Summarizer, Proofreader) for content creation and refinement. Additionally, the Translation APIs (Translator, Language Detector) enable multilingual experiences directly within the browser. The sources emphasise best practices for developers, covering aspects such as session management, efficient rendering of streamed responses, caching AI models, and debugging techniques, while also addressing security concerns and promoting a hybrid AI approach with server-side fallbacks like Firebase AI Logic.`);
+  const [text, setText] = useState(
+    `These documents collectively outline Chrome's built-in AI capabilities, specifically focusing on various client-side Web APIs powered by Gemini Nano. They detail the Prompt API for general language model interactions, including multimodal input (images, audio), and the Writing Assistance APIs (Writer, Rewriter, Summarizer, Proofreader) for content creation and refinement. Additionally, the Translation APIs (Translator, Language Detector) enable multilingual experiences directly within the browser. The sources emphasise best practices for developers, covering aspects such as session management, efficient rendering of streamed responses, caching AI models, and debugging techniques, while also addressing security concerns and promoting a hybrid AI approach with server-side fallbacks like Firebase AI Logic.`
+  );
   const [sharedContext, setSharedContext] = useState(
     "Explain clearly and concisely to a general audience."
   );
@@ -26,16 +27,19 @@ export const SummarizerComponent = () => {
 
   useEffect(() => {
     const init = async () => {
+      setLoading(true);
       const availability = await Summarizer.availability();
       if (availability === "unavailable") {
         // The Summarizer API isn't usable.
         console.log("API unavailable");
+        setLoading(false);
         return;
       }
 
       if (availability === "downloading") {
         // The Summarizer API isn't usable.
         console.log("Downloading API");
+        setLoading(false);
         return;
       }
 
@@ -47,10 +51,10 @@ export const SummarizerComponent = () => {
       };
 
       const modelKey = JSON.stringify(options);
-      
-      if(cachedSummarizer[modelKey])
-      {
+
+      if (cachedSummarizer[modelKey]) {
         console.log("Content cached.");
+        setLoading(false);
         return;
       }
 
@@ -69,7 +73,7 @@ export const SummarizerComponent = () => {
       cachedSummarizer[modelKey] = newSummarizer;
       setSummarizerOptions(modelKey);
       console.log("Content created and added to cache");
-      
+      setLoading(false);
     };
     init();
   }, [sharedContext, summarizerType, summarizerFormat, summarizerLength]);
@@ -80,16 +84,15 @@ export const SummarizerComponent = () => {
     setError(null);
     setResult(null);
     try {
-      const summary = await cachedSummarizer[summarizerOptions].summarize(text, {
+      const summary = await cachedSummarizer[
+        summarizerOptions
+      ].summarizeStreaming(text, {
         context: sharedContext,
       });
 
-      let res = "";
       for await (const chunk of summary) {
-        res += chunk;
+        setResult((prev) => (prev || "") + chunk);
       }
-
-      setResult(res);
     } catch (err: any) {
       setError(err?.message || "Error inesperado");
     } finally {
