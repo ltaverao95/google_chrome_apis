@@ -30,6 +30,13 @@ export const Home = () => {
             Go <span aria-hidden="true">→</span>
           </NavLink>
         </div>
+        <div className={styles.card}>
+          <h2>Rewriter API</h2>
+          <p>Google Built-in API Rewriter</p>
+          <NavLink to="/rewriter" className={styles.goLink}>
+            Go <span aria-hidden="true">→</span>
+          </NavLink>
+        </div>
       </div>
     </section>
   );
