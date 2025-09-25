@@ -27,6 +27,7 @@ export const SummarizerComponent = () => {
 
   useEffect(() => {
     const init = async () => {
+      alert('Loading')
       setLoading(true);
       const availability = await Summarizer.availability();
       if (availability === "unavailable") {
