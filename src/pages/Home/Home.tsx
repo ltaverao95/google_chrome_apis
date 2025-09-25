@@ -17,8 +17,11 @@ export const Home = () => {
           </NavLink>
         </div>
         <div className={styles.card}>
-          <h2>Estilos</h2>
-          <p>CSS modular + variables de tema para consistencia.</p>
+          <h2>Translator API</h2>
+          <p>Google Built-in API Translator</p>
+          <NavLink to="/translator" className={styles.goLink}>
+            Ir <span aria-hidden="true">→</span>
+          </NavLink>
         </div>
         <div className={styles.card}>
           <h2>Tipado</h2>

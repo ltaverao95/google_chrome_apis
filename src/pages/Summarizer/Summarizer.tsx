@@ -28,11 +28,17 @@ export const SummarizerComponent = () => {
   useEffect(() => {
     const init = async () => {
       setLoading(true);
+
+      if (!("Summarizer" in self)) {
+        alert("This browser does not support the Google Built-in Summarizer API.");
+        return;
+      }
+
       const availability = await Summarizer.availability();
       if (availability === "unavailable") {
         // The Summarizer API isn't usable.
         console.log("API unavailable");
-        alert('API Not Available');
+        alert("API Not Available");
         setLoading(false);
         return;
       }
@@ -40,7 +46,7 @@ export const SummarizerComponent = () => {
       if (availability === "downloading") {
         // The Summarizer API isn't usable.
         console.log("Downloading API");
-        alert('Downloading Model, please wait.');
+        alert("Downloading Model, please wait.");
         setLoading(false);
         return;
       }
