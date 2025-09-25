@@ -32,6 +32,7 @@ export const SummarizerComponent = () => {
       if (availability === "unavailable") {
         // The Summarizer API isn't usable.
         console.log("API unavailable");
+        alert('API Not Available')
         setLoading(false);
         return;
       }
@@ -194,7 +195,6 @@ export const SummarizerComponent = () => {
           {!result && !loading && (
             <p className={styles.placeholder}>El resumen aparecerá aquí.</p>
           )}
-          {loading && <p className={styles.loading}>Generando resumen...</p>}
           {result && <article className={styles.result}>{result}</article>}
         </div>
       </div>

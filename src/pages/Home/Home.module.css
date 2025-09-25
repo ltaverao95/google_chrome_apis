@@ -38,7 +38,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255,0,110,0.35), transparent 60%),
+  background: radial-gradient(circle at 30% 30%, rgba(0, 255, 0, 0.35), transparent 60%),
               radial-gradient(circle at 70% 70%, rgba(131,56,236,0.35), transparent 60%);
   opacity: 0.85;
   mix-blend-mode: overlay;

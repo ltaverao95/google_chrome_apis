@@ -4,7 +4,7 @@
   justify-content: space-between;
   padding: 0.85rem 1.5rem;
   backdrop-filter: blur(12px);
-  background: linear-gradient(90deg, rgba(255,0,110,0.85), rgba(131,56,236,0.85));
+  background: linear-gradient(90deg, rgba(255, 132, 0, 0.85), rgba(131,56,236,0.85));
   color: #fff;
   font-family: var(--font-headings);
   box-shadow: 0 4px 16px -4px rgba(0,0,0,0.35);
