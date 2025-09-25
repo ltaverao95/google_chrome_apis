@@ -18,7 +18,7 @@ export const Home = () => {
         </div>
         <div className={styles.card}>
           <h2>Translator API</h2>
-          <p>Google Built-in API Translator</p>
+          <p>Google Built-in API Translator and Language Detection</p>
           <NavLink to="/translator" className={styles.goLink}>
             Ir <span aria-hidden="true">→</span>
           </NavLink>
