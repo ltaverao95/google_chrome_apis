@@ -4,9 +4,9 @@ import { NavLink } from 'react-router-dom';
 export const Home = () => {
   return (
     <section className={styles.wrapper}>
-      <h1>Explora Chrome APIs</h1>
+      <h1>Explore Chrome APIs</h1>
       <p>
-        Proyecto inicial en React + TypeScript con una paleta de colores vívida y estilos modulares.
+        Chrome Integrated APIs Laboratory: Current examples of Summarizer, Translator (with language detection) and Writer.
       </p>
       <div className={styles.grid}> 
         <div className={styles.card}>
