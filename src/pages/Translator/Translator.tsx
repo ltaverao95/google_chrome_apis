@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Translator.module.css";
+import { NavLink } from "react-router-dom";
 
 declare global {
   const Translator: any;
@@ -38,15 +39,22 @@ export const TranslatorComponent = () => {
         return;
       }
 
-      const languageDetectorModel = await LanguageDetector.create({
-        monitor(m: any) {
-          m.addEventListener("downloadprogress", (e: ProgressEvent) => {
-            console.log(
-              `Downloading Language Detector Model: ${e.loaded * 100}%`
-            );
-          });
-        },
-      });
+      let languageDetectorModel;
+
+      if (languageDetectorAvailability === "available") {
+        // The Writer API can be used immediately .
+        languageDetectorModel = await LanguageDetector.create();
+      } else {
+        languageDetectorModel = await LanguageDetector.create({
+          monitor(m: any) {
+            m.addEventListener("downloadprogress", (e: ProgressEvent) => {
+              console.log(
+                `Downloading Language Detector Model: ${e.loaded * 100}%`
+              );
+            });
+          },
+        });
+      }
 
       cachedLanguageDetector["default"] = languageDetectorModel;
       await detectLanguage();
@@ -59,12 +67,13 @@ export const TranslatorComponent = () => {
       const translatorOptionsModelKey = JSON.stringify(translatorOptionsLocal);
       if (cachedTranslator[translatorOptionsModelKey]) {
         console.log("Content cached.");
-        setTranslatorOptions(translatorOptionsModelKey);
         setIsLoading(false);
         return;
       }
 
-      const translatorAvailability = await Translator.availability(translatorOptionsLocal);
+      const translatorAvailability = await Translator.availability(
+        translatorOptionsLocal
+      );
 
       if (!isValidModelState(translatorAvailability)) {
         alert("API Not Available for the selected languages.");
@@ -72,20 +81,27 @@ export const TranslatorComponent = () => {
         return;
       }
 
-      const translator = await Translator.create({
-        ...translatorOptionsLocal,
-        monitor(m: any) {
-          m.addEventListener("downloadprogress", (e: Event) => {
-            const progressEvent = e as ProgressEvent;
-            console.log(
-              `Downloading Translator in progress: ${
-                progressEvent.loaded * 100
-              }% of ${translatorOptionsModelKey}`
-            );
-          });
-        },
-      });
-      
+      let translator;
+
+      if (translatorAvailability === "available") {
+        // The Writer API can be used immediately .
+        translator = await Translator.create(translatorOptionsLocal);
+      } else {
+        translator = await Translator.create({
+          ...translatorOptionsLocal,
+          monitor(m: any) {
+            m.addEventListener("downloadprogress", (e: Event) => {
+              const progressEvent = e as ProgressEvent;
+              console.log(
+                `Downloading Translator in progress: ${
+                  progressEvent.loaded * 100
+                }% of ${translatorOptionsModelKey}`
+              );
+            });
+          },
+        });
+      }
+
       cachedTranslator[translatorOptionsModelKey] = translator;
       setTranslatorOptions(translatorOptionsModelKey);
       setIsLoading(false);
@@ -136,14 +152,11 @@ export const TranslatorComponent = () => {
   };
 
   const detectLanguage = async (): Promise<void> => {
-    const [{ detectedLanguage, confidence }] = await cachedLanguageDetector["default"].detect(
-      input
-    );
+    const [{ detectedLanguage, confidence }] = await cachedLanguageDetector[
+      "default"
+    ].detect(input);
     const confidenceParsed = (confidence * 100).toFixed(1);
-    const languageTag = languageTagToHumanReadable(
-      detectedLanguage,
-      "en"
-    );
+    const languageTag = languageTagToHumanReadable(detectedLanguage, "en");
     setDetectedLanguageCode(detectedLanguage);
     const detectedText = `${confidenceParsed}% sure that this is ${languageTag}`;
     setDetectedLanguageText(detectedText);
@@ -169,6 +182,12 @@ export const TranslatorComponent = () => {
 
   return (
     <section className={styles.wrapper}>
+      <NavLink to="/" className={styles.backLink}>
+        <span className={styles.backIcon} aria-hidden="true">
+          ←
+        </span>
+        <span className={styles.backText}>Home</span>
+      </NavLink>
       <form onSubmit={handleTranslate} className={styles.form}>
         <h1 className={styles.title}>Input:</h1>
 

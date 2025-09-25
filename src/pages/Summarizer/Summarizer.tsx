@@ -30,7 +30,9 @@ export const SummarizerComponent = () => {
       setLoading(true);
 
       if (!("Summarizer" in self)) {
-        alert("This browser does not support the Google Built-in Summarizer API.");
+        alert(
+          "This browser does not support the Google Built-in Summarizer API."
+        );
         return;
       }
 
@@ -66,19 +68,27 @@ export const SummarizerComponent = () => {
         return;
       }
 
-      const newSummarizer = await Summarizer.create({
-        ...options,
-        monitor(m: any) {
-          m.addEventListener("downloadprogress", (e: Event) => {
-            const progressEvent = e as ProgressEvent;
-            console.log(
-              `Downloading Summarizer Model in progress: ${progressEvent.loaded * 100}% of ${modelKey}`
-            );
-          });
-        },
-      });
+      let summarizer;
 
-      cachedSummarizer[modelKey] = newSummarizer;
+      if (availability === "available") {
+        summarizer = await Summarizer.create(options);
+      } else {
+        summarizer = await Summarizer.create({
+          ...options,
+          monitor(m: any) {
+            m.addEventListener("downloadprogress", (e: Event) => {
+              const progressEvent = e as ProgressEvent;
+              console.log(
+                `Downloading Summarizer Model in progress: ${
+                  progressEvent.loaded * 100
+                }% of ${modelKey}`
+              );
+            });
+          },
+        });
+      }
+
+      cachedSummarizer[modelKey] = summarizer;
       setSummarizerOptions(modelKey);
       console.log("Content created and added to cache");
       setLoading(false);
