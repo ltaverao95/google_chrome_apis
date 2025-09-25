@@ -171,40 +171,50 @@ export const TranslatorComponent = () => {
     <section className={styles.wrapper}>
       <form onSubmit={handleTranslate} className={styles.form}>
         <h1 className={styles.title}>Input:</h1>
-        <textarea
-          value={input}
-          onChange={handleInputChange}
-          rows={8}
-          className={styles.textarea}
-        />
-        <div className={styles.detection}>{detectedLanguageText}</div>
-        <textarea
-          value={translatedText}
-          rows={8}
-          readOnly
-          className={styles.textarea}
-        />
-        <label className={styles.selectLabel}>
-          <span>Translate to</span>
-          <select
-            value={targetLang}
-            onChange={(e) => setTargetLang(e.target.value)}
-            className={styles.select}
+
+        <div className={styles.panels}>
+          <div className={styles.panel}>
+            <textarea
+              value={input}
+              onChange={handleInputChange}
+              rows={8}
+              className={styles.textarea}
+            />
+            <div className={styles.detection}>{detectedLanguageText}</div>
+          </div>
+          <div className={styles.panel}>
+            <textarea
+              value={translatedText}
+              rows={8}
+              readOnly
+              className={styles.textarea}
+            />
+          </div>
+        </div>
+
+        <div className={styles.controlsRow}>
+          <label className={styles.selectLabel}>
+            <span>Translate to</span>
+            <select
+              value={targetLang}
+              onChange={(e) => setTargetLang(e.target.value)}
+              className={styles.select}
+            >
+              <option value="es">Spanish</option>
+              <option value="en">English</option>
+              <option value="de">German</option>
+              <option value="it">Italian</option>
+              <option value="fr">French</option>
+            </select>
+          </label>
+          <button
+            type="submit"
+            disabled={disableButton}
+            className={styles.button}
           >
-            <option value="es">Spanish</option>
-            <option value="en">English</option>
-            <option value="de">German</option>
-            <option value="it">Italian</option>
-            <option value="fr">French</option>
-          </select>
-        </label>
-        <button
-          type="submit"
-          disabled={disableButton}
-          className={styles.button}
-        >
-          Translate
-        </button>
+            Translate
+          </button>
+        </div>
       </form>
     </section>
   );
