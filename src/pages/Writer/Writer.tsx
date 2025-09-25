@@ -26,6 +26,7 @@ export const WriterComponent = () => {
   useEffect(() => {
     const init = async () => {
       setIsLoading(true);
+      setGenerated("");
 
       if (!("Writer" in self)) {
         // The Writer API is supported.
@@ -45,7 +46,7 @@ export const WriterComponent = () => {
         sharedContext: sharedContext,
         tone: writerOptionsTone,
         format: writerOptionsFormat,
-        length: writerOptionsLength,
+        length: writerOptionsLength
       };
 
       const writerOptionsModelKey = JSON.stringify(writerOptions);
@@ -87,12 +88,10 @@ export const WriterComponent = () => {
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
-    const stream = cachedWriter[writerOptions]?.writeStreaming(
-      writerPrompt, {
-        context: writerContextInput
-      }
-    );
+    setGenerated("");
+    const stream = cachedWriter[writerOptions]?.writeStreaming(writerPrompt, {
+      context: writerContextInput
+    });
 
     for await (const chunk of stream) {
       setGenerated((prev) => prev + chunk);
