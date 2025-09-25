@@ -32,7 +32,7 @@ export const SummarizerComponent = () => {
       if (availability === "unavailable") {
         // The Summarizer API isn't usable.
         console.log("API unavailable");
-        alert('API Not Available')
+        alert('API Not Available');
         setLoading(false);
         return;
       }
@@ -40,7 +40,7 @@ export const SummarizerComponent = () => {
       if (availability === "downloading") {
         // The Summarizer API isn't usable.
         console.log("Downloading API");
-        alert('Downloading Model, please wait.')
+        alert('Downloading Model, please wait.');
         setLoading(false);
         return;
       }
@@ -65,6 +65,7 @@ export const SummarizerComponent = () => {
         monitor(m: any) {
           m.addEventListener("downloadprogress", (e: Event) => {
             const progressEvent = e as ProgressEvent;
+            alert(`Download progress: ${progressEvent.loaded * 100}% of ${modelKey}`);
             console.log(
               `Download progress: ${progressEvent.loaded * 100}% of ${modelKey}`
             );
@@ -103,8 +104,6 @@ export const SummarizerComponent = () => {
   };
 
   const disabled = loading || !text.trim();
-
-  alert('Loading');
 
   return (
     <section className={styles.wrapper}>
