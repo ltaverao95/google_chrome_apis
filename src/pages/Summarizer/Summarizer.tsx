@@ -40,6 +40,7 @@ export const SummarizerComponent = () => {
       if (availability === "downloading") {
         // The Summarizer API isn't usable.
         console.log("Downloading API");
+        alert('Downloading Model, please wait.')
         setLoading(false);
         return;
       }
