@@ -72,7 +72,7 @@ export const SummarizerComponent = () => {
           m.addEventListener("downloadprogress", (e: Event) => {
             const progressEvent = e as ProgressEvent;
             console.log(
-              `Download progress: ${progressEvent.loaded * 100}% of ${modelKey}`
+              `Downloading Summarizer Model in progress: ${progressEvent.loaded * 100}% of ${modelKey}`
             );
           });
         },
