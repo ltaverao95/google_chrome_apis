@@ -1,5 +1,0 @@
-.wrapper { display: flex; flex-direction: column; gap: 1.25rem; }
-.wrapper h1 { font-size: 2rem; font-family: var(--font-headings); }
-.wrapper p { max-width: 70ch; }
-.list { list-style: square; padding-left: 1.25rem; display: flex; flex-direction: column; gap: .4rem; }
-.list li { font-size: .95rem; }

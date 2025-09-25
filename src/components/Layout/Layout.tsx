@@ -9,7 +9,7 @@ export const Layout = () => {
       <main className={styles.main}>
         <Outlet />
       </main>
-      <footer className={styles.footer}>Hecho con React + Vite</footer>
+      <footer className={styles.footer}>Copyright - Luis Tavera</footer>
     </div>
   );
 };

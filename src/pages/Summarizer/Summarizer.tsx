@@ -65,7 +65,6 @@ export const SummarizerComponent = () => {
         monitor(m: any) {
           m.addEventListener("downloadprogress", (e: Event) => {
             const progressEvent = e as ProgressEvent;
-            alert(`Download progress: ${progressEvent.loaded * 100}% of ${modelKey}`);
             console.log(
               `Download progress: ${progressEvent.loaded * 100}% of ${modelKey}`
             );
@@ -111,18 +110,18 @@ export const SummarizerComponent = () => {
         <span className={styles.backIcon} aria-hidden="true">
           ←
         </span>
-        <span className={styles.backText}>Inicio</span>
+        <span className={styles.backText}>Home</span>
       </NavLink>
       <div className={styles.left}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <h1 className={styles.title}>Text to summarize</h1>
           <label className={styles.label}>
-            <span className={styles.labelText}>Contenido</span>
+            <span className={styles.labelText}>Content</span>
             <textarea
               className={styles.textarea}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Pega o escribe el texto que deseas resumir..."
+              placeholder="Paste or type the text you want to summarize..."
               rows={14}
               required
             />
@@ -134,7 +133,7 @@ export const SummarizerComponent = () => {
               className={styles.input}
               value={sharedContext}
               onChange={(e) => setSharedContext(e.target.value)}
-              placeholder="Contexto opcional compartido (ej. dominio, tema)"
+              placeholder="Optional shared context (e.g. domain, topic)"
             />
           </label>
           <button className={styles.button} disabled={disabled} type="submit">
@@ -193,9 +192,9 @@ export const SummarizerComponent = () => {
         </form>
         <hr className={styles.divider} />
         <div className={styles.resultZone}>
-          <h2 className={styles.subtitle}>Resultado</h2>
+          <h2 className={styles.subtitle}>Result</h2>
           {!result && !loading && (
-            <p className={styles.placeholder}>El resumen aparecerá aquí.</p>
+            <p className={styles.placeholder}>The summary will appear here.</p>
           )}
           {result && <article className={styles.result}>{result}</article>}
         </div>
