@@ -16,8 +16,8 @@ export const PromptComponent = () => {
   const [generated, setGenerated] = useState("");
   const [isStreamingActive, setIsStreamingActive] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [temperature, setTemperature] = useState(0.7);
-  const [topK, setTopK] = useState(40);
+  const [temperature, setTemperature] = useState(1);
+  const [topK, setTopK] = useState(3);
 
   useEffect(() => {
     const init = async () => {
@@ -35,9 +35,10 @@ export const PromptComponent = () => {
       }
 
       const languageModelParams = await LanguageModel.params();
+      console.log("Default LanguageModel params:", languageModelParams);
 
-      languageModelParams.temperature = temperature;
-      languageModelParams.topK = topK;
+      languageModelParams.temperature = temperature || languageModelParams.defaultTemperature;
+      languageModelParams.topK = topK || languageModelParams.defaultTopK;
 
       let sessionLanguageModel;
       if (availability === "available") {
@@ -71,7 +72,7 @@ export const PromptComponent = () => {
       setIsLoading(false);
     };
     init();
-  }, [isStreamingActive, systemPrompt, temperature, topK]);
+  }, [systemPrompt, temperature, topK]);
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] || null;
@@ -84,19 +85,19 @@ export const PromptComponent = () => {
     setGenerated("");
     setIsLoading(true);
 
+    let promptContent = [
+        { type: "text", value: promptInput }
+    ];
+
+    if(imageFile) {
+      promptContent.push({ type: "image", value: imageFile });
+    }
+
     const prompt = [
       {
         role: "user",
-        content: [
-          { type: "text", value: promptInput },
-          { type: "image", value: imageFile },
-        ],
-      },
-      {
-        role: "assistant",
-        content: "```by: ltavera-bot\n",
-        prefix: true,
-      },
+        content: promptContent,
+      }
     ];
 
     let promptResponse;
@@ -224,13 +225,13 @@ export const PromptComponent = () => {
               <input
                 type="range"
                 min="0"
-                max="1"
-                step="0.01"
+                max="2"
+                step="0.1"
                 value={temperature}
                 onChange={(e) => setTemperature(parseFloat(e.target.value))}
                 className={styles.range}
                 aria-valuemin={0}
-                aria-valuemax={1}
+                aria-valuemax={2}
                 aria-valuenow={temperature}
               />
               <span className={styles.rangeValue}>
@@ -244,13 +245,13 @@ export const PromptComponent = () => {
             <input
               type="number"
               min={1}
-              max={100}
+              max={128}
               value={topK}
               onChange={(e) =>
                 setTopK(Math.min(100, Math.max(1, Number(e.target.value) || 1)))
               }
               className={styles.numberInput}
-              placeholder="40"
+              placeholder="e.g., 3"
             />
           </label>
         </div>
