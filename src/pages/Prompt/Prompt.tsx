@@ -1,26 +1,128 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Prompt.module.css";
+
+declare global {
+  const LanguageModel: any;
+}
+
+const cachedLanguageModel: Record<string, typeof LanguageModel> = {};
 
 export const PromptComponent = () => {
   const [promptInput, setPromptInput] = useState("");
-  const [systemPrompt, setSystemPrompt] = useState("");
+  const [systemPrompt, setSystemPrompt] = useState(
+    "You are a helpful and friendly assistant."
+  );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [generated, setGenerated] = useState("");
-  const [streaming, setStreaming] = useState(true);
+  const [isStreamingActive, setIsStreamingActive] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    const init = async () => {
+      setIsLoading(true);
+      if (!("LanguageModel" in self)) {
+        console.error("LanguageModel is not defined");
+        return;
+      }
+
+      const availability = await LanguageModel.availability();
+
+      if (availability === "unavailable") {
+        console.log("The LanguageModel API isn't usable.");
+        return;
+      }
+
+      const languageModelParams = await LanguageModel.params();
+
+      let sessionLanguageModel;
+      if (availability === "available") {
+        sessionLanguageModel = await LanguageModel.create({
+          ...languageModelParams,
+          initialPrompts: [
+            {
+              role: "system",
+              content: systemPrompt,
+            },
+          ],
+          expectedInputs: [{ type: "image" }, { type: "audio" }],
+        });
+      } else {
+        sessionLanguageModel = await LanguageModel.create({
+          ...languageModelParams,
+          monitor(m: any) {
+            m.addEventListener("downloadprogress", (e: any) => {
+              console.log(`Downloaded ${e.loaded * 100}%`);
+            });
+          },
+        });
+      }
+
+      cachedLanguageModel["default"] = sessionLanguageModel;
+      console.log("LanguageModel initialized and cached.");
+      console.log(
+        `Input Usage: ${cachedLanguageModel["default"].inputUsage} / Input Quota: ${cachedLanguageModel["default"].inputQuota}`
+      );
+
+      setIsLoading(false);
+    };
+    init();
+  }, [isStreamingActive, systemPrompt]);
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] || null;
     setImageFile(f);
   };
 
-  const handleRun = (e: React.FormEvent) => {
+  const handleRun = async (e: React.FormEvent) => {
     e.preventDefault();
-    setGenerated(
-      `Generated Output (mock)\n\nPrompt:\n${promptInput}\n\nSystem Prompt:\n${systemPrompt}\n\nImage: ${
-        imageFile ? imageFile.name : "None"
-      }\nStreaming: ${streaming ? "On" : "Off"}`
-    );
+
+    setGenerated("");
+    setIsLoading(true);
+
+    const prompt = [
+      {
+        role: "user",
+        content: [
+          { type: "text", value: promptInput },
+          { type: "image", value: imageFile },
+        ],
+      },
+      {
+        role: "assistant",
+        content: "```by: ltavera-bot\n",
+        prefix: true,
+      },
+    ];
+
+    let promptResponse;
+
+    if (isStreamingActive) {
+      promptResponse = await cachedLanguageModel["default"].promptStreaming(
+        prompt
+      );
+      for await (const chunk of promptResponse) {
+        setGenerated((prev) => prev + chunk);
+      }
+
+      console.log(
+        `Input Usage: ${cachedLanguageModel["default"].inputUsage} / Input Quota: ${cachedLanguageModel["default"].inputQuota}`
+      );
+
+      setIsLoading(false);
+
+      return;
+    }
+
+    promptResponse = await cachedLanguageModel["default"].prompt(prompt);
+    console.log(
+        `Input Usage: ${cachedLanguageModel["default"].inputUsage} / Input Quota: ${cachedLanguageModel["default"].inputQuota}`
+      );
+    setGenerated(promptResponse);
+
+    setIsLoading(false);
   };
+
+  const isDisabled = isLoading || !promptInput.trim();
 
   return (
     <section className={styles.wrapper}>
@@ -74,17 +176,25 @@ export const PromptComponent = () => {
             />
           </label>
 
-            <div className={styles.actions}>
-              <button type="submit" className={styles.runBtn}>
-                Run Prompt
-              </button>
-            </div>
+          <div className={styles.actions}>
+            <button
+              type="submit"
+              className={`${styles.runBtn} ${isLoading ? styles.loading : ""}`}
+              disabled={isDisabled}
+              aria-busy={isLoading}
+            >
+              <span className={styles.runBtnContent}>
+                {isLoading && (
+                  <span className={styles.spinner} aria-hidden="true" />
+                )}
+                <span>Run Prompt</span>
+              </span>
+            </button>
+          </div>
 
           <div className={styles.outputBlock}>
             <h3 className={styles.outputTitle}>Generated Output</h3>
-            <p className={styles.outputText}>
-              {generated || "No output yet."}
-            </p>
+            <p className={styles.outputText}>{generated || "No output yet."}</p>
           </div>
         </form>
       </div>
@@ -95,8 +205,8 @@ export const PromptComponent = () => {
           <label className={styles.switch}>
             <input
               type="checkbox"
-              checked={streaming}
-              onChange={(e) => setStreaming(e.target.checked)}
+              checked={isStreamingActive}
+              onChange={(e) => setIsStreamingActive(e.target.checked)}
             />
             <span className={styles.slider} />
           </label>

@@ -152,15 +152,39 @@
   padding: .65rem 1.3rem;
   cursor: pointer;
   letter-spacing: .4px;
-  transition: background .15s, transform .15s;
+  transition: background .15s, transform .15s, box-shadow .15s;
+  position: relative;
+  display: inline-flex;
 }
 
-.runBtn:hover {
+.runBtnContent {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  line-height: 1;
+}
+
+.runBtn:hover:not(:disabled) {
   background: #1d4fc5;
 }
 
-.runBtn:active {
+.runBtn:active:not(:disabled) {
   transform: translateY(1px);
+}
+
+.runBtn:hover:not(:disabled) {
+  background: #1d4fc5;
+}
+
+.runBtn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.runBtn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  background: #1d4fc5;
+  box-shadow: none;
 }
 
 .outputBlock {
@@ -252,6 +276,29 @@
 
 .switch input:checked + .slider::before {
   transform: translateX(22px);
+}
+
+/* Loading spinner overlay */
+.loading {
+  pointer-events: none;
+}
+
+.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border: 2px solid #ffffffcc;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Responsive */
