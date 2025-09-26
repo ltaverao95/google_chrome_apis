@@ -16,6 +16,8 @@ export const PromptComponent = () => {
   const [generated, setGenerated] = useState("");
   const [isStreamingActive, setIsStreamingActive] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [temperature, setTemperature] = useState(0.7);
+  const [topK, setTopK] = useState(40);
 
   useEffect(() => {
     const init = async () => {
@@ -33,6 +35,9 @@ export const PromptComponent = () => {
       }
 
       const languageModelParams = await LanguageModel.params();
+
+      languageModelParams.temperature = temperature;
+      languageModelParams.topK = topK;
 
       let sessionLanguageModel;
       if (availability === "available") {
@@ -66,7 +71,7 @@ export const PromptComponent = () => {
       setIsLoading(false);
     };
     init();
-  }, [isStreamingActive, systemPrompt]);
+  }, [isStreamingActive, systemPrompt, temperature, topK]);
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] || null;
@@ -115,8 +120,8 @@ export const PromptComponent = () => {
 
     promptResponse = await cachedLanguageModel["default"].prompt(prompt);
     console.log(
-        `Input Usage: ${cachedLanguageModel["default"].inputUsage} / Input Quota: ${cachedLanguageModel["default"].inputQuota}`
-      );
+      `Input Usage: ${cachedLanguageModel["default"].inputUsage} / Input Quota: ${cachedLanguageModel["default"].inputQuota}`
+    );
     setGenerated(promptResponse);
 
     setIsLoading(false);
@@ -209,6 +214,44 @@ export const PromptComponent = () => {
               onChange={(e) => setIsStreamingActive(e.target.checked)}
             />
             <span className={styles.slider} />
+          </label>
+        </div>
+
+        <div className={styles.paramGroup}>
+          <label className={styles.paramField}>
+            <span className={styles.paramLabel}>Temperature</span>
+            <div className={styles.rangeRow}>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={temperature}
+                onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                className={styles.range}
+                aria-valuemin={0}
+                aria-valuemax={1}
+                aria-valuenow={temperature}
+              />
+              <span className={styles.rangeValue}>
+                {temperature.toFixed(2)}
+              </span>
+            </div>
+          </label>
+
+          <label className={styles.paramField}>
+            <span className={styles.paramLabel}>Top K</span>
+            <input
+              type="number"
+              min={1}
+              max={100}
+              value={topK}
+              onChange={(e) =>
+                setTopK(Math.min(100, Math.max(1, Number(e.target.value) || 1)))
+              }
+              className={styles.numberInput}
+              placeholder="40"
+            />
           </label>
         </div>
       </div>
