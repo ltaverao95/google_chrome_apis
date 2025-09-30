@@ -38,7 +38,7 @@ export const ProofreaderComponent = () => {
         expectedInputLanguages: [language],
         correctionExplanationLanguage: language,
         includeCorrectionTypes: includeCorrectionTypes,
-        includeCorrectionExplanations: includeCorrectionExplanations
+        includeCorrectionExplanations: includeCorrectionExplanations,
       };
 
       const proofreaderOptionsModelKey = JSON.stringify(proofreaderOptions);
@@ -72,7 +72,7 @@ export const ProofreaderComponent = () => {
     language,
     isStreaming,
     includeCorrectionTypes,
-    includeCorrectionExplanations
+    includeCorrectionExplanations,
   ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,7 +94,7 @@ export const ProofreaderComponent = () => {
     setCorrectedText(proofreadResult.correctedInput);
     console.log("Proofread Result:", proofreadResult);
     console.log("Proofread Result:", proofreadResult.corrections);
-    
+
     setIsLoading(false);
   };
 
@@ -107,6 +107,7 @@ export const ProofreaderComponent = () => {
         <span className={styles.backText}>Home</span>
       </NavLink>
       <div className={styles.left}>
+        <h2>Proofreader</h2>
         <form onSubmit={handleSubmit} className={styles.formBlock}>
           <label className={styles.field}>
             <span className={styles.label}>Input Text</span>
@@ -188,25 +189,35 @@ export const ProofreaderComponent = () => {
                 <span className={styles.slider} />
               </label>
             </div>
-          </div>
-        </div>
 
-        <div className={styles.languageCard}>
-          <label className={styles.languageLabel}>
-            <span className={styles.languageTitle}>Language</span>
-            <select
-              className={styles.languageSelect}
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-            >
-              <option value="en">English</option>
-              <option value="ja" disabled>Japanese</option>
-              <option value="es" disabled>Spanish</option>
-              <option value="de" disabled>German</option>
-              <option value="it" disabled>Italian</option>
-              <option value="fr" disabled>French</option>
-            </select>
-          </label>
+            <div className={styles.toggleGroup}>
+              <label className={styles.languageLabel}>
+                <span className={styles.languageTitle}>Language</span>
+                <select
+                  className={styles.languageSelect}
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                >
+                  <option value="en">English</option>
+                  <option value="ja" disabled>
+                    Japanese
+                  </option>
+                  <option value="es" disabled>
+                    Spanish
+                  </option>
+                  <option value="de" disabled>
+                    German
+                  </option>
+                  <option value="it" disabled>
+                    Italian
+                  </option>
+                  <option value="fr" disabled>
+                    French
+                  </option>
+                </select>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </section>

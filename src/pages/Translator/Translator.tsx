@@ -188,6 +188,7 @@ export const TranslatorComponent = () => {
         </span>
         <span className={styles.backText}>Home</span>
       </NavLink>
+      <h2>Translator & Language Recognition</h2>
       <form onSubmit={handleTranslate} className={styles.form}>
         <h1 className={styles.title}>Input:</h1>
 

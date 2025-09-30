@@ -166,6 +166,7 @@ export const PromptComponent = () => {
         <span className={styles.backText}>Home</span>
       </NavLink>
       <div className={styles.left}>
+        <h2>Prompt</h2>
         <form onSubmit={handleRun} className={styles.form}>
           <label className={styles.field}>
             <span className={styles.label}>Prompt Input</span>

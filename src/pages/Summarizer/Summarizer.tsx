@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import styles from "./Summarizer.module.css";
 import { NavLink } from "react-router-dom";
 
 declare global {
@@ -121,20 +120,21 @@ export const SummarizerComponent = () => {
   const disabled = loading || !text.trim();
 
   return (
-    <section className={styles.wrapper}>
-      <NavLink to="/" className={styles.backLink}>
-        <span className={styles.backIcon} aria-hidden="true">
+    <section className="wrapper">
+      <NavLink to="/" className="backLink">
+        <span className="backIcon" aria-hidden="true">
           ←
         </span>
-        <span className={styles.backText}>Home</span>
+        <span className="backText">Home</span>
       </NavLink>
-      <div className={styles.left}>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <h1 className={styles.title}>Text to summarize</h1>
-          <label className={styles.label}>
-            <span className={styles.labelText}>Content</span>
+      <div className="left">
+        <h2>Summarizer</h2>
+        <form onSubmit={handleSubmit} className="form">
+          <h1 className="title">Text to summarize</h1>
+          <label className="label">
+            <span className="labelText">Content</span>
             <textarea
-              className={styles.textarea}
+              className="textarea"
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Paste or type the text you want to summarize..."
@@ -142,38 +142,38 @@ export const SummarizerComponent = () => {
               required
             />
           </label>
-          <label className={styles.label}>
-            <span className={styles.labelText}>Shared context</span>
+          <label className="label">
+            <span className="labelText">Shared context</span>
             <input
               type="text"
-              className={styles.input}
+              className="input"
               value={sharedContext}
               onChange={(e) => setSharedContext(e.target.value)}
               placeholder="Optional shared context (e.g. domain, topic)"
             />
           </label>
-          <button className={styles.button} disabled={disabled} type="submit">
+          <button className="button" disabled={disabled} type="submit">
             Summarize
           </button>
           {error && (
-            <p className={styles.error} role="alert">
+            <p className="error" role="alert">
               {error}
             </p>
           )}
         </form>
       </div>
-      <div className={styles.right}>
+      <div className="right">
         <form
-          className={styles.rightForm}
+          className="rightForm"
           aria-label="Opciones de resumen (mock)"
         >
-          <div className={styles.selectGroup}>
-            <label className={styles.selectLabel}>
+          <div className="selectGroup">
+            <label className="selectLabel">
               Type
               <select
                 value={summarizerType}
                 onChange={(e) => setSummarizerType(e.target.value)}
-                className={styles.select}
+                className="select"
               >
                 <option value="key-points">Key Points</option>
                 <option value="tldr">TLDR</option>
@@ -181,23 +181,23 @@ export const SummarizerComponent = () => {
                 <option value="headline">Headline</option>
               </select>
             </label>
-            <label className={styles.selectLabel}>
+            <label className="selectLabel">
               Formats
               <select
                 value={summarizerFormat}
                 onChange={(e) => setSummarizerFormat(e.target.value)}
-                className={styles.select}
+                className="select"
               >
                 <option value="markdown">Markdown</option>
                 <option value="plain-text">Plain Text</option>
               </select>
             </label>
-            <label className={styles.selectLabel}>
+            <label className="selectLabel">
               Option Length
               <select
                 value={summarizerLength}
                 onChange={(e) => setSummarizerLength(e.target.value)}
-                className={styles.select}
+                className="select"
               >
                 <option value="short">Short</option>
                 <option value="medium">Medium</option>
@@ -206,13 +206,13 @@ export const SummarizerComponent = () => {
             </label>
           </div>
         </form>
-        <hr className={styles.divider} />
-        <div className={styles.resultZone}>
-          <h2 className={styles.subtitle}>Result</h2>
+        <hr className="divider" />
+        <div className="resultZone">
+          <h2 className="subtitle">Result</h2>
           {!result && !loading && (
-            <p className={styles.placeholder}>The summary will appear here.</p>
+            <p className="placeholder">The summary will appear here.</p>
           )}
-          {result && <article className={styles.result}>{result}</article>}
+          {result && <article className="result">{result}</article>}
         </div>
       </div>
     </section>

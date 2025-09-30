@@ -111,6 +111,7 @@ export const RewriterComponent = () => {
         <span className={styles.backText}>Home</span>
       </NavLink>
       <div className={styles.left}>
+        <h2>Re-Writer</h2>
         <form onSubmit={handleGenerate} className={styles.form}>
           <div className={styles.textareasRow}>
             <label className={styles.field}>
