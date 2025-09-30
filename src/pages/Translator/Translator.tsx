@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import styles from "./Translator.module.css";
 import { NavLink } from "react-router-dom";
 
 declare global {
@@ -181,61 +180,66 @@ export const TranslatorComponent = () => {
   const disableButton = isLoading || !input.trim();
 
   return (
-    <section className={styles.wrapper}>
-      <NavLink to="/" className={styles.backLink}>
-        <span className={styles.backIcon} aria-hidden="true">
+    <section className="wrapper">
+      <NavLink to="/" className="backLink">
+        <span className="backIcon" aria-hidden="true">
           ←
         </span>
-        <span className={styles.backText}>Home</span>
+        <span className="backText">Home</span>
       </NavLink>
-      <h2>Translator & Language Recognition</h2>
-      <form onSubmit={handleTranslate} className={styles.form}>
-        <h1 className={styles.title}>Input:</h1>
+      <div className="left">
+        <h2>Translator & Language Recognition</h2>
+        <form onSubmit={handleTranslate} className="form">
+          <h1 className="title">Input:</h1>
 
-        <div className={styles.panels}>
-          <div className={styles.panel}>
-            <textarea
-              value={input}
-              onChange={handleInputChange}
-              rows={8}
-              className={styles.textarea}
-            />
-            <div className={styles.detection}>{detectedLanguageText}</div>
+          <div className="panels">
+            <div className="panel">
+              <textarea
+                value={input}
+                onChange={handleInputChange}
+                rows={8}
+                className="textarea"
+              />
+              <div className="detection">{detectedLanguageText}</div>
+            </div>
+            <div className="panel">
+              <textarea
+                value={translatedText}
+                rows={8}
+                readOnly
+                className="textarea"
+              />
+            </div>
           </div>
-          <div className={styles.panel}>
-            <textarea
-              value={translatedText}
-              rows={8}
-              readOnly
-              className={styles.textarea}
-            />
-          </div>
-        </div>
-
-        <div className={styles.controlsRow}>
-          <label className={styles.selectLabel}>
-            <span>Translate to</span>
-            <select
-              value={targetLang}
-              onChange={(e) => setTargetLang(e.target.value)}
-              className={styles.select}
-            >
-              <option value="es">Spanish</option>
-              <option value="en">English</option>
-              <option value="de">German</option>
-              <option value="it">Italian</option>
-              <option value="fr">French</option>
-            </select>
-          </label>
           <button
             type="submit"
             disabled={disableButton}
-            className={styles.button}
+            className="button"
           >
             Translate
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
+      <div className="right">
+        <form className="rightForm">
+          <div className="selectGroup">
+            <label className="selectLabel">
+              <span>Translate to</span>
+              <select
+                value={targetLang}
+                onChange={(e) => setTargetLang(e.target.value)}
+                className="select"
+              >
+                <option value="es">Spanish</option>
+                <option value="en">English</option>
+                <option value="de">German</option>
+                <option value="it">Italian</option>
+                <option value="fr">French</option>
+              </select>
+            </label>
+          </div>
+        </form>
+      </div>
     </section>
   );
 };
