@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import styles from "./Prompt.module.css";
 import { NavLink } from "react-router-dom";
 
 declare global {
@@ -158,57 +157,54 @@ export const PromptComponent = () => {
   const isDisabled = isLoading || !promptInput.trim();
 
   return (
-    <section className={styles.wrapper}>
-      <NavLink to="/" className={styles.backLink}>
-        <span className={styles.backIcon} aria-hidden="true">
+    <section className="wrapper">
+      <NavLink to="/" className="backLink">
+        <span className="backIcon" aria-hidden="true">
           ←
         </span>
-        <span className={styles.backText}>Home</span>
+        <span className="backText">Home</span>
       </NavLink>
-      <div className={styles.left}>
+      <div className="left">
         <h2>Prompt</h2>
-        <form onSubmit={handleRun} className={styles.form}>
-          <label className={styles.field}>
-            <span className={styles.label}>Prompt Input</span>
+        <form onSubmit={handleRun} className="form">
+          <label className="label">
+            <span className="labelText">Prompt Input</span>
             <textarea
-              className={styles.textarea}
+              className="textarea"
               rows={2}
               value={promptInput}
               onChange={(e) => setPromptInput(e.target.value)}
               placeholder="Write your prompt..."
             />
-            <small className={styles.hint}>
-              Min 1 line, max ~5 lines (you can resize).
-            </small>
           </label>
 
-          <label className={styles.field}>
-            <span className={styles.label}>Add image (optional)</span>
-            <div className={styles.fileWrapper}>
+          <label className="label">
+            <span className="labelText">Add image (optional)</span>
+            <div className="fileWrapper">
               <input
                 id="promptImage"
                 type="file"
                 accept="image/*"
-                className={styles.fileInput}
+                className="fileInput"
                 onChange={handleFile}
               />
-              <label htmlFor="promptImage" className={styles.fileButton}>
+              <label htmlFor="promptImage" className="fileButton">
                 Choose Image
               </label>
               {imageFile ? (
-                <span className={styles.fileInfo}>
+                <span className="fileInfo">
                   {imageFile.name} ({Math.round(imageFile.size / 1024)} KB)
                 </span>
               ) : (
-                <span className={styles.filePlaceholder}>No file selected</span>
+                <span className="filePlaceholder">No file selected</span>
               )}
             </div>
           </label>
 
-          <label className={styles.field}>
-            <span className={styles.label}>System Prompt</span>
+          <label className="label">
+            <span className="labelText">System Prompt</span>
             <textarea
-              className={styles.textarea}
+              className="textarea"
               rows={2}
               value={systemPrompt}
               onChange={(e) => setSystemPrompt(e.target.value)}
@@ -216,86 +212,90 @@ export const PromptComponent = () => {
             />
           </label>
 
-          <div className={styles.actions}>
+          <div className="actions">
             <button
               type="submit"
-              className={`${styles.runBtn} ${isLoading ? styles.loading : ""}`}
+              className={`runBtn ${isLoading ? "loading" : ""}`}
               disabled={isDisabled}
               aria-busy={isLoading}
             >
-              <span className={styles.runBtnContent}>
+              <span className="runBtnContent">
                 {isLoading && (
-                  <span className={styles.spinner} aria-hidden="true" />
+                  <span className="spinner" aria-hidden="true" />
                 )}
                 <span>Run Prompt</span>
               </span>
             </button>
             <button
               type="button"
-              className={styles.runBtn}
+              className="runBtn"
               onClick={handleStop}
             >
               Stop
             </button>
           </div>
 
-          <div className={styles.outputBlock}>
-            <h3 className={styles.outputTitle}>Generated Output</h3>
-            <p className={styles.outputText}>{generated || "No output yet."}</p>
+          <div className="resultZone">
+            <h3 className="subtitle">Generated Output</h3>
+            <p className="result">{generated || "No output yet."}</p>
           </div>
         </form>
       </div>
 
-      <div className={styles.right}>
-        <div className={styles.toggleGroup}>
-          <span className={styles.toggleLabel}>Streaming</span>
-          <label className={styles.switch}>
-            <input
-              type="checkbox"
-              checked={isStreamingActive}
-              onChange={(e) => setIsStreamingActive(e.target.checked)}
-            />
-            <span className={styles.slider} />
-          </label>
-        </div>
-
-        <div className={styles.paramGroup}>
-          <label className={styles.paramField}>
-            <span className={styles.paramLabel}>Temperature</span>
-            <div className={styles.rangeRow}>
-              <input
-                type="range"
-                min="0"
-                max="2"
-                step="0.1"
-                value={temperature}
-                onChange={(e) => setTemperature(parseFloat(e.target.value))}
-                className={styles.range}
-                aria-valuemin={0}
-                aria-valuemax={2}
-                aria-valuenow={temperature}
-              />
-              <span className={styles.rangeValue}>
-                {temperature.toFixed(2)}
-              </span>
+      <div className="right">
+        <form className="rightForm">
+          <div className="selectGroup">
+            <div className="toggleGroup">
+              <span className="toggleLabel">Streaming</span>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  checked={isStreamingActive}
+                  onChange={(e) => setIsStreamingActive(e.target.checked)}
+                />
+                <span className="slider" />
+              </label>
             </div>
-          </label>
 
-          <label className={styles.paramField}>
-            <span className={styles.paramLabel}>Top K</span>
-            <input
-              type="number"
-              min={1}
-              max={128}
-              value={topK}
-              onChange={(e) =>
-                setTopK(Math.min(100, Math.max(1, Number(e.target.value) || 1)))
-              }
-              className={styles.numberInput}
-              placeholder="e.g., 3"
-            />
-          </label>
-        </div>
+            <div className="paramGroup">
+              <label className="selectLabel">
+                <span className="paramLabel">Temperature</span>
+                <div className="rangeRow">
+                  <input
+                    type="range"
+                    min="0"
+                    max="2"
+                    step="0.1"
+                    value={temperature}
+                    onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                    className="range"
+                    aria-valuemin={0}
+                    aria-valuemax={2}
+                    aria-valuenow={temperature}
+                  />
+                  <span className="rangeValue">
+                    {temperature.toFixed(2)}
+                  </span>
+                </div>
+              </label>
+
+              <label className="selectLabel">
+                <span className="paramLabel">Top K</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={128}
+                  value={topK}
+                  onChange={(e) =>
+                    setTopK(Math.min(100, Math.max(1, Number(e.target.value) || 1)))
+                  }
+                  className="input"
+                  placeholder="e.g., 3"
+                />
+              </label>
+            </div>
+          </div>
+        </form>
       </div>
     </section>
   );

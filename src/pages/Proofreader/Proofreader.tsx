@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import styles from "./Proofreader.module.css";
 import { NavLink } from "react-router-dom";
 
 declare global {
@@ -99,20 +98,20 @@ export const ProofreaderComponent = () => {
   };
 
   return (
-    <section className={styles.wrapper}>
-      <NavLink to="/" className={styles.backLink}>
-        <span className={styles.backIcon} aria-hidden="true">
+    <section className="wrapper">
+      <NavLink to="/" className="backLink">
+        <span className="backIcon" aria-hidden="true">
           ←
         </span>
-        <span className={styles.backText}>Home</span>
+        <span className="backText">Home</span>
       </NavLink>
-      <div className={styles.left}>
+      <div className="left">
         <h2>Proofreader</h2>
-        <form onSubmit={handleSubmit} className={styles.formBlock}>
-          <label className={styles.field}>
-            <span className={styles.label}>Input Text</span>
+        <form onSubmit={handleSubmit} className="form">
+          <label className="label">
+            <span className="labelText">Input Text</span>
             <textarea
-              className={styles.textarea}
+              className="textarea"
               rows={5}
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -120,21 +119,19 @@ export const ProofreaderComponent = () => {
             />
           </label>
 
-          <div className={styles.actions}>
-            <button
-              type="submit"
-              className={styles.button}
-              disabled={isLoading || !text.trim()}
-            >
-              {isLoading ? "Processing..." : "Proffread"}
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="button"
+            disabled={isLoading || !text.trim()}
+          >
+            {isLoading ? "Processing..." : "Proffread"}
+          </button>
         </form>
 
-        <div className={styles.outputSection}>
-          <h3 className={styles.outputTitle}>Corrected text</h3>
+        <div className="resultZone">
+          <h3 className="subtitle">Corrected text</h3>
           <textarea
-            className={`${styles.textarea} ${styles.readonly}`}
+            className="textarea"
             readOnly
             rows={5}
             value={correctedText}
@@ -143,42 +140,41 @@ export const ProofreaderComponent = () => {
         </div>
       </div>
 
-      <div className={styles.right}>
-        <h4 className={styles.settingsTitle}>Settings</h4>
-        <div className={styles.settingsCard}>
-          <div className={styles.toggleRow}>
-            <div className={styles.toggleGroup}>
-              <span className={styles.toggleLabel}>Streaming</span>
-              <label className={styles.switch}>
+      <div className="right">
+        <form className="rightForm">
+          <div className="selectGroup">
+            <div className="toggleGroup">
+              <span className="toggleLabel">Streaming</span>
+              <label className="switch">
                 <input
                   type="checkbox"
                   checked={isStreaming}
                   disabled
                   onChange={(e) => setIsStreaming(e.target.checked)}
                 />
-                <span className={styles.slider} />
+                <span className="slider" />
               </label>
             </div>
 
-            <div className={styles.toggleGroup}>
-              <span className={styles.toggleLabel}>
+            <div className="toggleGroup">
+              <span className="toggleLabel">
                 Include Correction Types
               </span>
-              <label className={styles.switch}>
+              <label className="switch">
                 <input
                   type="checkbox"
                   checked={includeCorrectionTypes}
                   onChange={(e) => setIncludeCorrectionTypes(e.target.checked)}
                 />
-                <span className={styles.slider} />
+                <span className="slider" />
               </label>
             </div>
 
-            <div className={styles.toggleGroup}>
-              <span className={styles.toggleLabel}>
+            <div className="toggleGroup">
+              <span className="toggleLabel">
                 Include Correction Explanations
               </span>
-              <label className={styles.switch}>
+              <label className="switch">
                 <input
                   type="checkbox"
                   checked={includeCorrectionExplanations}
@@ -186,15 +182,15 @@ export const ProofreaderComponent = () => {
                     setIncludeCorrectionExplanations(e.target.checked)
                   }
                 />
-                <span className={styles.slider} />
+                <span className="slider" />
               </label>
             </div>
 
-            <div className={styles.toggleGroup}>
-              <label className={styles.languageLabel}>
-                <span className={styles.languageTitle}>Language</span>
+            <div className="toggleGroup">
+              <label className="selectLabel">
+                <span className="languageTitle">Language</span>
                 <select
-                  className={styles.languageSelect}
+                  className="select"
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
                 >
@@ -218,7 +214,7 @@ export const ProofreaderComponent = () => {
               </label>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   );
