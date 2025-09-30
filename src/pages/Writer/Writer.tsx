@@ -146,7 +146,7 @@ export const WriterComponent = () => {
             className="textarea"
             readOnly
             value={generated}
-            placeholder="Aquí aparecerá el texto generado..."
+            placeholder="Generated text will appear here..."
             rows={14}
           />
         </div>

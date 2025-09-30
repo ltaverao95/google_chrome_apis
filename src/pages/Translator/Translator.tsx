@@ -208,6 +208,7 @@ export const TranslatorComponent = () => {
             rows={8}
             readOnly
             className="textarea"
+            placeholder="Generated text will appear here..."
           />
         </form>
       </div>
