@@ -111,3 +111,16 @@
   }
 }
 
+/* Writer specific styles */
+.textareasRow {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 780px) {
+  .textareasRow {
+    grid-template-columns: 1fr;
+  }
+}
+

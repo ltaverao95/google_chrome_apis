@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import styles from "./Writer.module.css";
 import { NavLink } from "react-router-dom";
 
 declare global {
@@ -103,104 +102,105 @@ export const WriterComponent = () => {
   const buttonDisabled = isLoading || writerPrompt.trim() === "";
 
   return (
-    <section className={styles.wrapper}>
-      <NavLink to="/" className={styles.backLink}>
-        <span className={styles.backIcon} aria-hidden="true">
+    <section className="wrapper">
+      <NavLink to="/" className="backLink">
+        <span className="backIcon" aria-hidden="true">
           ←
         </span>
-        <span className={styles.backText}>Home</span>
+        <span className="backText">Home</span>
       </NavLink>
-      <div className={styles.left}>
+      <div className="left">
         <h2>Writer</h2>
-        <form onSubmit={handleGenerate} className={styles.form}>
-          <div className={styles.textareasRow}>
-            <label className={styles.field}>
-              <span className={styles.label}>Topic to write about</span>
+        <form onSubmit={handleGenerate} className="form">
+          <div className="textareasRow">
+            <label className="label">
+              <span className="labelText">Topic to write about</span>
               <textarea
-                className={styles.textarea}
+                className="textarea"
                 value={writerPrompt}
                 onChange={(e) => setWriterPrompt(e.target.value)}
                 rows={8}
               />
             </label>
-            <label className={styles.field}>
-              <span className={styles.label}>Context</span>
+            <label className="label">
+              <span className="labelText">Context</span>
               <textarea
-                className={styles.textarea}
+                className="textarea"
                 value={writerContextInput}
                 onChange={(e) => setWriterContextInput(e.target.value)}
                 rows={8}
               />
             </label>
           </div>
-          <div className={styles.actions}>
-            <button
-              className={styles.button}
-              type="submit"
-              disabled={buttonDisabled}
-            >
-              Write
-            </button>
+          <button
+            className="button"
+            type="submit"
+            disabled={buttonDisabled}
+          >
+            Write
+          </button>
+        </form>
+      </div>
+      <div className="right">
+        <form className="rightForm">
+          <div className="selectGroup">
+            <label className="selectLabel">
+              <span className="controlLabel">Shared Context</span>
+              <input
+                type="text"
+                className="input"
+                value={sharedContext}
+                onChange={(e) => setSharedContext(e.target.value)}
+                placeholder="Información adicional..."
+              />
+            </label>
+            <label className="selectLabel">
+              <span className="controlLabel">Tone</span>
+              <select
+                className="select"
+                value={writerOptionsTone}
+                onChange={(e) => setWriterOptionsTone(e.target.value)}
+              >
+                <option value="formal">Formal</option>
+                <option value="neutral">Neutral</option>
+                <option value="casual">Casual</option>
+              </select>
+            </label>
+            <label className="selectLabel">
+              <span className="controlLabel">Length</span>
+              <select
+                className="select"
+                value={writerOptionsLength}
+                onChange={(e) => setWriterOptionsLength(e.target.value)}
+              >
+                <option value="short">Short</option>
+                <option value="medium">Medium</option>
+                <option value="long">Long</option>
+              </select>
+            </label>
+            <label className="selectLabel">
+              <span className="controlLabel">Format</span>
+              <select
+                className="select"
+                value={writerOptionsFormat}
+                onChange={(e) => setWriterOptionsFormat(e.target.value)}
+              >
+                <option value="markdown">Markdown</option>
+                <option value="plain-text">Plain Text</option>
+              </select>
+            </label>
           </div>
         </form>
-        <div className={styles.generatedBlock}>
-          <h3 className={styles.generatedTitle}>Generated Text</h3>
+        <hr className="divider" />
+        <div className="resultZone">
+          <h2 className="subtitle">Generated Text</h2>
           <textarea
-            className={`${styles.textarea} ${styles.readonly}`}
+            className="textarea"
             readOnly
             value={generated}
             placeholder="Aquí aparecerá el texto generado..."
             rows={14}
           />
-        </div>
-      </div>
-      <div className={styles.right}>
-        <div className={styles.controls}>
-          <label className={styles.controlField}>
-            <span className={styles.controlLabel}>Shared Context</span>
-            <input
-              type="text"
-              className={styles.input}
-              value={sharedContext}
-              onChange={(e) => setSharedContext(e.target.value)}
-              placeholder="Información adicional..."
-            />
-          </label>
-          <label className={styles.controlField}>
-            <span className={styles.controlLabel}>Tone</span>
-            <select
-              className={styles.select}
-              value={writerOptionsTone}
-              onChange={(e) => setWriterOptionsTone(e.target.value)}
-            >
-              <option value="formal">Formal</option>
-              <option value="neutral">Neutral</option>
-              <option value="casual">Casual</option>
-            </select>
-          </label>
-          <label className={styles.controlField}>
-            <span className={styles.controlLabel}>Length</span>
-            <select
-              className={styles.select}
-              value={writerOptionsLength}
-              onChange={(e) => setWriterOptionsLength(e.target.value)}
-            >
-              <option value="short">Short</option>
-              <option value="medium">Medium</option>
-              <option value="long">Long</option>
-            </select>
-          </label>
-          <label className={styles.controlField}>
-            <span className={styles.controlLabel}>Format</span>
-            <select
-              className={styles.select}
-              value={writerOptionsFormat}
-              onChange={(e) => setWriterOptionsFormat(e.target.value)}
-            >
-              <option value="markdown">Markdown</option>
-              <option value="plain-text">Plain Text</option>
-            </select>
-          </label>
         </div>
       </div>
     </section>
