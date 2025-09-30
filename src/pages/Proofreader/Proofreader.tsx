@@ -106,7 +106,7 @@ export const ProofreaderComponent = () => {
         <span className="backText">Home</span>
       </NavLink>
       <div className="left">
-        <h2>Proofreader</h2>
+        <h2 className="title">Proofreader</h2>
         <form onSubmit={handleSubmit} className="form">
           <label className="label">
             <span className="labelText">Input Text</span>

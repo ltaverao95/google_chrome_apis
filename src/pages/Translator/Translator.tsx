@@ -188,9 +188,9 @@ export const TranslatorComponent = () => {
         <span className="backText">Home</span>
       </NavLink>
       <div className="left">
-        <h2>Translator & Language Recognition</h2>
+        <h2 className="title">Translator & Language Recognition</h2>
         <form onSubmit={handleTranslate} className="form">
-          <h1 className="title">Input:</h1>
+          <h1 className="subtitle">Input:</h1>
 
           <textarea
             value={input}
@@ -202,7 +202,7 @@ export const TranslatorComponent = () => {
           <button type="submit" disabled={disableButton} className="button">
             Translate
           </button>
-          <h2 className="title">Translated Content:</h2>
+          <h2 className="subtitle">Translated Content:</h2>
           <textarea
             value={translatedText}
             rows={8}

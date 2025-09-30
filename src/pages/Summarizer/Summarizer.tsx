@@ -128,9 +128,9 @@ export const SummarizerComponent = () => {
         <span className="backText">Home</span>
       </NavLink>
       <div className="left">
-        <h2>Summarizer</h2>
+        <h2 className="title">Summarizer</h2>
         <form onSubmit={handleSubmit} className="form">
-          <h1 className="title">Text to summarize</h1>
+          <h1 className="subtitle">Text to summarize</h1>
           <label className="label">
             <span className="labelText">Content</span>
             <textarea
@@ -142,16 +142,6 @@ export const SummarizerComponent = () => {
               required
             />
           </label>
-          <label className="label">
-            <span className="labelText">Shared context</span>
-            <input
-              type="text"
-              className="input"
-              value={sharedContext}
-              onChange={(e) => setSharedContext(e.target.value)}
-              placeholder="Optional shared context (e.g. domain, topic)"
-            />
-          </label>
           <button className="button" disabled={disabled} type="submit">
             Summarize
           </button>
@@ -161,6 +151,13 @@ export const SummarizerComponent = () => {
             </p>
           )}
         </form>
+        <div className="resultZone">
+          <h2 className="subtitle">Result</h2>
+          {!result && !loading && (
+            <p className="placeholder">The summary will appear here.</p>
+          )}
+          {result && <article className="result">{result}</article>}
+        </div>
       </div>
       <div className="right">
         <form
@@ -207,13 +204,16 @@ export const SummarizerComponent = () => {
           </div>
         </form>
         <hr className="divider" />
-        <div className="resultZone">
-          <h2 className="subtitle">Result</h2>
-          {!result && !loading && (
-            <p className="placeholder">The summary will appear here.</p>
-          )}
-          {result && <article className="result">{result}</article>}
-        </div>
+        <label className="label">
+          <span className="labelText">Shared context</span>
+          <textarea
+            className="textarea"
+            value={sharedContext}
+            onChange={(e) => setSharedContext(e.target.value)}
+            placeholder="Optional shared context (e.g. domain, topic)"
+            rows={2}
+          />
+        </label>
       </div>
     </section>
   );

@@ -110,7 +110,7 @@ export const WriterComponent = () => {
         <span className="backText">Home</span>
       </NavLink>
       <div className="left">
-        <h2>Writer</h2>
+        <h2 className="title">Writer</h2>
         <form onSubmit={handleGenerate} className="form">
           <div className="textareasRow">
             <label className="label">
