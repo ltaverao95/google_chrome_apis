@@ -36,6 +36,7 @@ export const PromptComponent = () => {
       const availability = await LanguageModel.availability();
 
       if (availability === "unavailable") {
+        alert("API Not Available for this browser.");
         console.log("The LanguageModel API isn't usable.");
         return;
       }

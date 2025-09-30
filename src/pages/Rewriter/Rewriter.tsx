@@ -38,6 +38,7 @@ export const RewriterComponent = () => {
 
       if (availability === "unavailable") {
         console.log("The Rewriter API isn't usable.");
+        alert("API Not Available for this browser.");
         return;
       }
 

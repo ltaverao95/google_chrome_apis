@@ -30,6 +30,7 @@ export const ProofreaderComponent = () => {
       const availability = await Proofreader.availability();
       if (availability === "unavailable") {
         console.log("The Proofreader API isn't usable.");
+        alert("API Not Available for this browser.");
         return;
       }
 

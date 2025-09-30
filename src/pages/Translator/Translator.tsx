@@ -33,7 +33,7 @@ export const TranslatorComponent = () => {
         await LanguageDetector.availability();
 
       if (!isValidModelState(languageDetectorAvailability)) {
-        alert("API Not Available for the selected languages.");
+        alert("API Not Available for this browser.");
         setIsLoading(false);
         return;
       }

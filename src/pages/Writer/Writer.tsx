@@ -38,6 +38,7 @@ export const WriterComponent = () => {
 
       if (availability === "unavailable") {
         console.log("The Writer API isn't usable.");
+        alert("API Not Available for this browser.");
         return;
       }
 
