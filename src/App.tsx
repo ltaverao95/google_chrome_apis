@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./components/Layout/Layout";
 import { Home } from "./pages/Home/Home";
 import { NotFound } from "./pages/NotFound/NotFound";
@@ -10,18 +10,24 @@ import { PromptComponent } from "./pages/Prompt/Prompt";
 import { ProofreaderComponent } from "./pages/Proofreader/Proofreader";
 
 export default function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      errorElement: <NotFound />,
+      children: [
+        { index: true, element: <Home /> },
+        { path: "writer", element: <WriterComponent /> },
+        { path: "rewriter", element: <RewriterComponent  /> },
+        { path: "summarizer", element: <SummarizerComponent /> },
+        { path: "proofreader", element: <ProofreaderComponent /> },
+        { path: "translator", element: <TranslatorComponent /> },
+        { path: "prompt", element: <PromptComponent /> },
+      ],
+    },
+  ]);
+
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="summarizer" element={<SummarizerComponent />} />
-        <Route path="translator" element={<TranslatorComponent />} />
-        <Route path="writer" element={<WriterComponent />} />
-        <Route path="rewriter" element={<RewriterComponent />} />
-        <Route path="prompt" element={<PromptComponent />} />
-        <Route path="proofreader" element={<ProofreaderComponent />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+    <RouterProvider router={router} />
   );
 }
