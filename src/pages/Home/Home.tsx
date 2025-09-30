@@ -44,6 +44,13 @@ export const Home = () => {
             Go <span aria-hidden="true">→</span>
           </NavLink>
         </div>
+        <div className={styles.card}>
+          <h2>Proofreader API</h2>
+          <p>Google Built-in API Proofreader</p>
+          <NavLink to="/proofreader" className={styles.goLink}>
+            Go <span aria-hidden="true">→</span>
+          </NavLink>
+        </div>
       </div>
     </section>
   );

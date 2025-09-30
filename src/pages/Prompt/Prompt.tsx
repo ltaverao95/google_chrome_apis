@@ -8,9 +8,11 @@ declare global {
 const cachedLanguageModel: Record<string, typeof LanguageModel> = {};
 
 export const PromptComponent = () => {
-  const [promptInput, setPromptInput] = useState("");
+  const [promptInput, setPromptInput] = useState(
+    "How can i dress for this event?"
+  );
   const [systemPrompt, setSystemPrompt] = useState(
-    "You are a helpful and friendly assistant."
+    "You are a helpful and friendly fashion assistant."
   );
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [generated, setGenerated] = useState("");
@@ -18,6 +20,10 @@ export const PromptComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [temperature, setTemperature] = useState(1);
   const [topK, setTopK] = useState(3);
+  const [promptOptions, setPromptOptions] = useState<any>(null);
+  const [controller, setController] = useState<AbortController>(
+    new AbortController()
+  );
 
   useEffect(() => {
     const init = async () => {
@@ -37,8 +43,16 @@ export const PromptComponent = () => {
       const languageModelParams = await LanguageModel.params();
       console.log("Default LanguageModel params:", languageModelParams);
 
-      languageModelParams.temperature = temperature || languageModelParams.defaultTemperature;
+      languageModelParams.temperature =
+        temperature || languageModelParams.defaultTemperature;
       languageModelParams.topK = topK || languageModelParams.defaultTopK;
+
+      const promptOptionsModelKey = JSON.stringify(languageModelParams);
+      if (cachedLanguageModel[promptOptionsModelKey]) {
+        console.log("Content cached.");
+        setIsLoading(false);
+        return;
+      }
 
       let sessionLanguageModel;
       if (availability === "available") {
@@ -63,10 +77,11 @@ export const PromptComponent = () => {
         });
       }
 
-      cachedLanguageModel["default"] = sessionLanguageModel;
+      cachedLanguageModel[promptOptionsModelKey] = sessionLanguageModel;
+      setPromptOptions(promptOptionsModelKey);
       console.log("LanguageModel initialized and cached.");
       console.log(
-        `Input Usage: ${cachedLanguageModel["default"].inputUsage} / Input Quota: ${cachedLanguageModel["default"].inputQuota}`
+        `Input Usage: ${cachedLanguageModel[promptOptionsModelKey].inputUsage} / Input Quota: ${cachedLanguageModel[promptOptionsModelKey].inputQuota}`
       );
 
       setIsLoading(false);
@@ -85,11 +100,9 @@ export const PromptComponent = () => {
     setGenerated("");
     setIsLoading(true);
 
-    let promptContent = [
-        { type: "text", value: promptInput }
-    ];
+    let promptContent = [{ type: "text", value: promptInput }];
 
-    if(imageFile) {
+    if (imageFile) {
       promptContent.push({ type: "image", value: imageFile });
     }
 
@@ -97,21 +110,24 @@ export const PromptComponent = () => {
       {
         role: "user",
         content: promptContent,
-      }
+      },
     ];
 
     let promptResponse;
 
     if (isStreamingActive) {
-      promptResponse = await cachedLanguageModel["default"].promptStreaming(
-        prompt
+      promptResponse = await cachedLanguageModel[promptOptions].promptStreaming(
+        prompt,
+        {
+          signal: controller.signal,
+        }
       );
       for await (const chunk of promptResponse) {
         setGenerated((prev) => prev + chunk);
       }
 
       console.log(
-        `Input Usage: ${cachedLanguageModel["default"].inputUsage} / Input Quota: ${cachedLanguageModel["default"].inputQuota}`
+        `Input Usage: ${cachedLanguageModel[promptOptions].inputUsage} / Input Quota: ${cachedLanguageModel[promptOptions].inputQuota}`
       );
 
       setIsLoading(false);
@@ -119,13 +135,21 @@ export const PromptComponent = () => {
       return;
     }
 
-    promptResponse = await cachedLanguageModel["default"].prompt(prompt);
+    promptResponse = await cachedLanguageModel[promptOptions].prompt(prompt, {
+      signal: controller.signal,
+    });
     console.log(
-      `Input Usage: ${cachedLanguageModel["default"].inputUsage} / Input Quota: ${cachedLanguageModel["default"].inputQuota}`
+      `Input Usage: ${cachedLanguageModel[promptOptions].inputUsage} / Input Quota: ${cachedLanguageModel[promptOptions].inputQuota}`
     );
     setGenerated(promptResponse);
 
     setIsLoading(false);
+  };
+
+  const handleStop = () => {
+    controller.abort();
+    setIsLoading(false);
+    setController(new AbortController());
   };
 
   const isDisabled = isLoading || !promptInput.trim();
@@ -195,6 +219,13 @@ export const PromptComponent = () => {
                 )}
                 <span>Run Prompt</span>
               </span>
+            </button>
+            <button
+              type="button"
+              className={styles.runBtn}
+              onClick={handleStop}
+            >
+              Stop
             </button>
           </div>
 

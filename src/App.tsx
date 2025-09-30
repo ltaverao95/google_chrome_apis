@@ -7,6 +7,7 @@ import { TranslatorComponent } from "./pages/Translator/Translator";
 import { WriterComponent } from "./pages/Writer/Writer";
 import { RewriterComponent } from "./pages/Rewriter/Rewriter";
 import { PromptComponent } from "./pages/Prompt/Prompt";
+import { ProofreaderComponent } from "./pages/Proofreader/Proofreader";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="writer" element={<WriterComponent />} />
         <Route path="rewriter" element={<RewriterComponent />} />
         <Route path="prompt" element={<PromptComponent />} />
+        <Route path="proofreader" element={<ProofreaderComponent />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
