@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Prompt.module.css";
+import { NavLink } from "react-router-dom";
 
 declare global {
   const LanguageModel: any;
@@ -100,7 +101,9 @@ export const PromptComponent = () => {
     setGenerated("");
     setIsLoading(true);
 
-    let promptContent = [{ type: "text", value: promptInput }];
+    let promptContent: { type: string; value: string | File }[] = [
+      { type: "text", value: promptInput },
+    ];
 
     if (imageFile) {
       promptContent.push({ type: "image", value: imageFile });
@@ -156,6 +159,12 @@ export const PromptComponent = () => {
 
   return (
     <section className={styles.wrapper}>
+      <NavLink to="/" className={styles.backLink}>
+        <span className={styles.backIcon} aria-hidden="true">
+          ←
+        </span>
+        <span className={styles.backText}>Home</span>
+      </NavLink>
       <div className={styles.left}>
         <form onSubmit={handleRun} className={styles.form}>
           <label className={styles.field}>

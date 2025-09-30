@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Proofreader.module.css";
+import { NavLink } from "react-router-dom";
 
 declare global {
   const Proofreader: any;
@@ -99,6 +100,12 @@ export const ProofreaderComponent = () => {
 
   return (
     <section className={styles.wrapper}>
+      <NavLink to="/" className={styles.backLink}>
+        <span className={styles.backIcon} aria-hidden="true">
+          ←
+        </span>
+        <span className={styles.backText}>Home</span>
+      </NavLink>
       <div className={styles.left}>
         <form onSubmit={handleSubmit} className={styles.formBlock}>
           <label className={styles.field}>
