@@ -156,12 +156,12 @@ export const RewriterComponent = () => {
           <div className="selectGroup">
             <label className="selectLabel">
               <span className="controlLabel">Shared Context</span>
-              <input
-                type="text"
-                className="input"
+              <textarea
+                className="textarea"
                 value={sharedContext}
                 onChange={(e) => setSharedContext(e.target.value)}
                 placeholder="Información adicional..."
+                rows={2}
               />
             </label>
             <label className="selectLabel">

@@ -192,32 +192,23 @@ export const TranslatorComponent = () => {
         <form onSubmit={handleTranslate} className="form">
           <h1 className="title">Input:</h1>
 
-          <div className="panels">
-            <div className="panel">
-              <textarea
-                value={input}
-                onChange={handleInputChange}
-                rows={8}
-                className="textarea"
-              />
-              <div className="detection">{detectedLanguageText}</div>
-            </div>
-            <div className="panel">
-              <textarea
-                value={translatedText}
-                rows={8}
-                readOnly
-                className="textarea"
-              />
-            </div>
-          </div>
-          <button
-            type="submit"
-            disabled={disableButton}
-            className="button"
-          >
+          <textarea
+            value={input}
+            onChange={handleInputChange}
+            rows={8}
+            className="textarea"
+          />
+          <div className="detection">{detectedLanguageText}</div>
+          <button type="submit" disabled={disableButton} className="button">
             Translate
           </button>
+          <h2 className="title">Translated Content:</h2>
+          <textarea
+            value={translatedText}
+            rows={8}
+            readOnly
+            className="textarea"
+          />
         </form>
       </div>
       <div className="right">

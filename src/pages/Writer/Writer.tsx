@@ -140,18 +140,28 @@ export const WriterComponent = () => {
             Write
           </button>
         </form>
+        <div className="resultZone">
+          <h2 className="subtitle">Generated Text</h2>
+          <textarea
+            className="textarea"
+            readOnly
+            value={generated}
+            placeholder="Aquí aparecerá el texto generado..."
+            rows={14}
+          />
+        </div>
       </div>
       <div className="right">
         <form className="rightForm">
           <div className="selectGroup">
             <label className="selectLabel">
               <span className="controlLabel">Shared Context</span>
-              <input
-                type="text"
-                className="input"
+              <textarea
+                className="textarea"
                 value={sharedContext}
                 onChange={(e) => setSharedContext(e.target.value)}
                 placeholder="Información adicional..."
+                rows={2}
               />
             </label>
             <label className="selectLabel">
@@ -191,17 +201,6 @@ export const WriterComponent = () => {
             </label>
           </div>
         </form>
-        <hr className="divider" />
-        <div className="resultZone">
-          <h2 className="subtitle">Generated Text</h2>
-          <textarea
-            className="textarea"
-            readOnly
-            value={generated}
-            placeholder="Aquí aparecerá el texto generado..."
-            rows={14}
-          />
-        </div>
       </div>
     </section>
   );
